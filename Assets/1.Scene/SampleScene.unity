@@ -238,7 +238,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseSpeed: 20
-  speed: 0
 --- !u!50 &323468739
 Rigidbody2D:
   serializedVersion: 4
@@ -7414,6 +7413,7 @@ GameObject:
   - component: {fileID: 1104581333}
   - component: {fileID: 1104581332}
   - component: {fileID: 1104581335}
+  - component: {fileID: 1104581336}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
@@ -7533,6 +7533,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1104581336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104581331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe9c91bb9873d5943b89b9beb6e79ee2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHp: 0
+  dropTable:
+  - {fileID: 7738501366395164947, guid: 6dc5614e4eda41740855fbc43cfd64ee, type: 3}
 --- !u!1 &1122423640
 GameObject:
   m_ObjectHideFlags: 0

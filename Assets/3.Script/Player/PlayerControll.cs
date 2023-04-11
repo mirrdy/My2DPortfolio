@@ -8,7 +8,8 @@ public class PlayerControll : MonoBehaviour
     {
         Front,
         Back,
-        Side
+        Left,
+        Right
     };
     public enum PlayerState
     {
@@ -83,19 +84,19 @@ public class PlayerControll : MonoBehaviour
                 animator.SetTrigger("Back");
                 direction = Direction.Back;
             }
-            else if (x < 0 && y == 0 && direction != Direction.Side)
+            else if (x < 0 && y == 0 && direction != Direction.Left)
             {
                 gameObject.transform.localScale = new Vector3(-scaleX, scaleY, 1);
 
                 animator.SetTrigger("Side");
-                direction = Direction.Side;
+                direction = Direction.Left;
             }
-            else if (x > 0 && y == 0 && direction != Direction.Side)
+            else if (x > 0 && y == 0 && direction != Direction.Right)
             {
                 gameObject.transform.localScale = new Vector3(scaleX, scaleY, 1);
 
                 animator.SetTrigger("Side");
-                direction = Direction.Side;
+                direction = Direction.Right;
             }
 
             state = PlayerState.Move;
@@ -113,7 +114,7 @@ public class PlayerControll : MonoBehaviour
             {
                 animator.Play("PlayerIdleBack");
             }
-            else if(direction == Direction.Side)
+            else if(direction == Direction.Left || direction == Direction.Right)
             {
                 animator.Play("PlayerIdleSide");
             }
@@ -130,8 +131,6 @@ public class PlayerControll : MonoBehaviour
     }
     IEnumerator Attack_co()
     {
-        AnimatorStateInfo aniState = animator.GetCurrentAnimatorStateInfo(0);
-
         state = PlayerState.Attack;
         switch (direction)
         {
@@ -147,7 +146,7 @@ public class PlayerControll : MonoBehaviour
                     yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerAttackBack") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1);
                     break;
                 }
-            case Direction.Side:
+            case Direction.Left: case Direction.Right:
                 {
                     animator.Play("PlayerAttackSide");
                     yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerAttackSide") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1);
