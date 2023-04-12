@@ -66,7 +66,7 @@ public class PlayerControll : MonoBehaviour
             {
                 speed = baseSpeed * 2;
             }
-            if (Input.GetKeyUp(KeyCode.LeftShift) && Input.GetKeyUp(KeyCode.RightShift))
+            if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.RightShift))
             {
                 speed = baseSpeed;
             }
@@ -100,13 +100,15 @@ public class PlayerControll : MonoBehaviour
             }
 
             state = PlayerState.Move;
+            Debug.Log("State: Move");
             Vector2 dirVector = new Vector2(x, y).normalized * speed * Time.deltaTime;
             myRigid.MovePosition((Vector2)transform.position + dirVector);
         }
         if(x==0 && y==0 && state != PlayerState.Attack)
         {
             state = PlayerState.Idle;
-            if(direction == Direction.Front)
+            Debug.Log("State: Idle");
+            if (direction == Direction.Front)
             {
                 animator.Play("PlayerIdleFront");
             }
@@ -132,6 +134,7 @@ public class PlayerControll : MonoBehaviour
     IEnumerator Attack_co()
     {
         state = PlayerState.Attack;
+        Debug.Log("State: Attack");
         switch (direction)
         {
             case Direction.Front:
@@ -154,6 +157,7 @@ public class PlayerControll : MonoBehaviour
                 }
         }
         state = PlayerState.Idle;
+        Debug.Log("State: co finish - Idle");
     }
 
     void OnCollisionEnter(Collision collision)
