@@ -42,16 +42,52 @@ public class Inventory : MonoBehaviour
 
     public bool AddItem(Item item)
     {
-        if (items.Count < slotCount)
+        if (item.itemType != ItemType.Equipment)
         {
-            this.items.Add(item);
-            if (onChangeItem != null)
+            int itemIndex = this.items.FindIndex(findItem => findItem.itemName == item.itemName);
+            if (itemIndex >= 0)
             {
-                onChangeItem.Invoke();
+                this.items[itemIndex].amount++;
+                if (onChangeItem != null)
+                {
+                    onChangeItem.Invoke();
+                }
+                return true;
             }
-            return true;
+            else
+            {
+                if (items.Count < slotCount)
+                {
+                    this.items.Add(item);
+                    if (onChangeItem != null)
+                    {
+                        onChangeItem.Invoke();
+                    }
+                    return true;
+                }
+            }
         }
+        else
+        {
+            if (items.Count < slotCount)
+            {
+                this.items.Add(item);
+                if (onChangeItem != null)
+                {
+                    onChangeItem.Invoke();
+                }
+                return true;
+            }
+        }
+
         return false;
+    }
+
+    public void RemoveItem(int index)
+    {
+        items[index].amount--;
+        items.RemoveAt(index);
+        onChangeItem.Invoke();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
