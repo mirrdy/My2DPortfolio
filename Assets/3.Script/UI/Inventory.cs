@@ -85,7 +85,6 @@ public class Inventory : MonoBehaviour
 
     public void RemoveItem(int index)
     {
-        items[index].amount--;
         items.RemoveAt(index);
         onChangeItem.Invoke();
     }

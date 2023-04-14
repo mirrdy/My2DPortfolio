@@ -10,6 +10,11 @@ public class QuickSlot : MonoBehaviour
     public Item item;
     public Image itemIcon;
 
+    void Update()
+    {
+
+    }
+
     public void UpdateSlotUI()
     {
         itemIcon.sprite = item.itemImage;
