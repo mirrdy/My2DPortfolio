@@ -21,9 +21,14 @@ public class PlayerControll : MonoBehaviour
     private Movement2D movement2D;
     private Rigidbody2D myRigid;
     private Animator animator;
+    private Weapon weapon;
 
     public int baseSpeed = 5;
     private int speed = 0;
+    public float atkDamage = 1;
+
+    public Transform[] hitPosition;
+    public LayerMask hitLayer;
 
     private Direction direction;
     private PlayerState state;
@@ -135,6 +140,9 @@ public class PlayerControll : MonoBehaviour
     {
         state = PlayerState.Attack;
         Debug.Log("State: Attack");
+
+        
+
         switch (direction)
         {
             case Direction.Front:
@@ -164,4 +172,44 @@ public class PlayerControll : MonoBehaviour
     {
         Debug.Log(collision.collider.name);
     }
+
+    public void DigBrick()
+    {
+        int dir = ((int)direction);
+        if (dir == 3)
+        {
+            dir = 2;
+        }
+
+        Collider2D overCollider2d;
+        Vector2 tmpHitPosition;
+        float scaleX = hitPosition[dir].localScale.x;
+        float scaleY = hitPosition[dir].localScale.y;
+        for (int i=-1; i<2; i++)
+        {
+            // side 방향 (y축 3개)
+            if(dir == 2)
+            {
+                tmpHitPosition = hitPosition[dir].position + new Vector3(0, 0.07f * i / scaleY);
+                overCollider2d = Physics2D.OverlapCircle(tmpHitPosition, 0.01f, hitLayer);
+            }
+            // 앞뒤방향 (x축 3개)
+            else
+            {
+                tmpHitPosition = hitPosition[dir].position + new Vector3(0.07f * i / scaleX, 0);
+                overCollider2d = Physics2D.OverlapCircle(tmpHitPosition, 0.01f, hitLayer);
+            }
+
+
+            Debug.Log(tmpHitPosition);
+
+            if (overCollider2d != null)
+            {
+                overCollider2d.transform.GetComponent<Brick>().TakeDamegeDot(tmpHitPosition, atkDamage);
+                break;
+            }
+        }
+    }
+
+    
 }
