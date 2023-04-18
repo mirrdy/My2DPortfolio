@@ -79,24 +79,24 @@ public class PlayerControll : MonoBehaviour
             float scaleX = Mathf.Abs(gameObject.transform.localScale.x);
             float scaleY = gameObject.transform.localScale.y;
 
-            if (y == -1 && direction != Direction.Front)
+            if (y == -1 && (direction != Direction.Front || state == PlayerState.Idle))
             {
                 animator.SetTrigger("Front");
                 direction = Direction.Front;
             }
-            else if (y == 1 && direction != Direction.Back)
+            else if (y == 1 && (direction != Direction.Back || state == PlayerState.Idle))
             {
                 animator.SetTrigger("Back");
                 direction = Direction.Back;
             }
-            else if (x < 0 && y == 0 && direction != Direction.Left)
+            else if (x < 0 && y == 0 && (direction != Direction.Left || state == PlayerState.Idle))
             {
                 gameObject.transform.localScale = new Vector3(-scaleX, scaleY, 1);
 
                 animator.SetTrigger("Side");
                 direction = Direction.Left;
             }
-            else if (x > 0 && y == 0 && direction != Direction.Right)
+            else if (x > 0 && y == 0 && (direction != Direction.Right || state == PlayerState.Idle))
             {
                 gameObject.transform.localScale = new Vector3(scaleX, scaleY, 1);
 
@@ -200,13 +200,17 @@ public class PlayerControll : MonoBehaviour
                 overCollider2d = Physics2D.OverlapCircle(tmpHitPosition, 0.01f, hitLayer);
             }
 
-
             Debug.Log(tmpHitPosition);
 
-            if (overCollider2d != null)
+            if(overCollider2d != null)
             {
-                overCollider2d.transform.GetComponent<Brick>().TakeDamegeDot(tmpHitPosition, atkDamage);
-                break;
+                overCollider2d.TryGetComponent(out Brick brick);
+                if (brick != null)
+                {
+                    brick.TakeDamegeDot(tmpHitPosition, atkDamage);
+
+                    break;
+                }
             }
         }
     }

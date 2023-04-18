@@ -10,10 +10,12 @@ public class Brick : MonoBehaviour
     private float[] brickCurrentHp;
     private List<Vector3> brickPosition;
     private int brickCount;
+
+    public GameObject fieldItemPrefab; // 블럭 파괴시 드랍할 아이템
     // Start is called before the first frame update
     void Start()
     {
-        tileMap = GetComponent<Tilemap>();
+        TryGetComponent(out tileMap);
 
         brickPosition = new List<Vector3>();
 
@@ -35,30 +37,26 @@ public class Brick : MonoBehaviour
 
     public void TakeDamegeDot(Vector3 Pos, float damage)
     {
-        Vector3Int cellPosition = tileMap.WorldToCell(Pos);
+        Vector3Int brickPosition = tileMap.WorldToCell(Pos);
 
-        int tileIndex = brickPosition.FindIndex(vector => vector.Equals(cellPosition));
+        int tileIndex = this.brickPosition.FindIndex(vector => vector.Equals(brickPosition));
         if(tileIndex < 0)
         {
             return;
         }
         brickCurrentHp[tileIndex] -= damage;
-        if(brickCurrentHp[tileIndex] <= 0)
+        if(brickCurrentHp[tileIndex] <= 0 && tileMap.GetTile<Tile>(brickPosition) != null)
         {
-            tileMap.SetTile(cellPosition, null);
-
-            DropBrick(cellPosition);
+            DropBrick(brickPosition);
+            tileMap.SetTile(brickPosition, null);
         }
     }
 
     private void DropBrick(Vector3Int brickPosition)
     {
-        //GameObject item;
-
-        //item = Instantiate(tileMap.GetSprite(brickPosition));
-        //item.transform.parent = null;
-        //item.transform.position = gameObject.transform.position;
-
-        //obj.GetComponent<FieldItem>().SetItem(itemDB[Random.Range(0, 3)]);
+        GameObject obj = Instantiate(fieldItemPrefab, tileMap.CellToWorld(brickPosition), Quaternion.identity);
+        Item brickFieldItem = new Item("brick", tileMap.GetTile<Tile>(brickPosition).sprite, 1);
+        obj.transform.localScale = new Vector3(1f, 1f);
+        obj.GetComponent<FieldItem>().SetItem(brickFieldItem);
     }
 }
