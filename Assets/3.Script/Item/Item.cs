@@ -26,6 +26,13 @@ public class Item
         this.effects = effects;
     }
 
+    public Item CloneItem()
+    {
+        Item tmpItem = new Item(this.itemName, this.itemImage, this.amount, this.itemType, this.effects);
+
+        return tmpItem;
+    }
+
     public bool Use()
     {
         bool isUsed = false;

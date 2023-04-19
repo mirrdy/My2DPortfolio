@@ -10,7 +10,7 @@ public class Slot : MonoBehaviour
     public Item item;
     public Image itemIcon;
 
-    [SerializeField]private Text amountText;
+    public Text amountText;
 
     public void UpdateSlotUI()
     {
@@ -21,8 +21,16 @@ public class Slot : MonoBehaviour
     public void RemoveSlot()
     {
         item = null;
+        itemIcon.sprite = null;
         amountText.text = "0";
-        itemIcon.gameObject.SetActive(false);
+        //itemIcon.gameObject.SetActive(false);
+    }
+
+    public void ExchangeItem(Slot slot)
+    {
+        Item tmpItem = this.item.CloneItem();
+        this.item = slot.item.CloneItem();
+        slot.item = tmpItem.CloneItem();
     }
 
     private void UseItemInSlot()
@@ -38,7 +46,7 @@ public class Slot : MonoBehaviour
             amountText.text = item.amount.ToString();
             if (item.amount <= 0)
             {
-                Inventory.instance.RemoveItem(slotNum);
+                Inventory.instance.RemoveItem(item);
             }
         }
     }

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class QuickSlot : Slot
 {
+    public int linkedSlotIndex = 0;
     void Update()
     {
 

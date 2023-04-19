@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2937440244692478884}
   - component: {fileID: 5653221523045721134}
   m_Layer: 5
-  m_Name: amountText (1)
+  m_Name: amountText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -232,12 +232,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotNum: 0
   item:
-    itemType: 0
     itemName: 
     itemImage: {fileID: 0}
-    amount: 1
+    amount: 0
+    itemType: 0
     effects: []
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 9132534869226707305}
+  amountText: {fileID: 5653221523045721134}
 --- !u!1 &7182759097160127600
 GameObject:
   m_ObjectHideFlags: 0

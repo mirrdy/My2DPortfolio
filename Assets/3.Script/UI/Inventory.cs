@@ -83,9 +83,10 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
-    public void RemoveItem(int index)
+    public void RemoveItem(Item item)
     {
-        items.RemoveAt(index);
+        //items.RemoveAt(index);
+        items.Remove(item);
         onChangeItem.Invoke();
     }
 
