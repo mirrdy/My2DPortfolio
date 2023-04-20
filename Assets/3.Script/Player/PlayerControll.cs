@@ -23,6 +23,8 @@ public class PlayerControll : MonoBehaviour
     private Animator animator;
     private Weapon weapon;
 
+    public int maxHp = 100;
+    public int currentHp;
     public int baseSpeed = 5;
     private int speed = 0;
     public float atkDamage = 1;
@@ -38,6 +40,8 @@ public class PlayerControll : MonoBehaviour
         TryGetComponent(out movement2D);
         TryGetComponent(out myRigid);
         TryGetComponent(out animator);
+
+        currentHp = maxHp;
         speed = baseSpeed;
         direction = Direction.Front;
         state = PlayerState.Idle;
@@ -105,14 +109,12 @@ public class PlayerControll : MonoBehaviour
             }
 
             state = PlayerState.Move;
-            Debug.Log("State: Move");
             Vector2 dirVector = new Vector2(x, y).normalized * speed * Time.deltaTime;
             myRigid.MovePosition((Vector2)transform.position + dirVector);
         }
         if(x==0 && y==0 && state != PlayerState.Attack)
         {
             state = PlayerState.Idle;
-            Debug.Log("State: Idle");
             if (direction == Direction.Front)
             {
                 animator.Play("PlayerIdleFront");
@@ -139,9 +141,6 @@ public class PlayerControll : MonoBehaviour
     IEnumerator Attack_co()
     {
         state = PlayerState.Attack;
-        Debug.Log("State: Attack");
-
-        
 
         switch (direction)
         {
@@ -168,10 +167,15 @@ public class PlayerControll : MonoBehaviour
         Debug.Log("State: co finish - Idle");
     }
 
-    void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.collider.name);
+        Debug.Log($"collision Enter: {collision.collider.name}");
     }
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        Debug.Log($"collision Stay: {collision.collider.name}");
+    }
+
 
     public void DigBrick()
     {
@@ -199,8 +203,6 @@ public class PlayerControll : MonoBehaviour
                 tmpHitPosition = hitPosition[dir].position + new Vector3(0.07f * i / scaleX, 0);
                 overCollider2d = Physics2D.OverlapCircle(tmpHitPosition, 0.01f, hitLayer);
             }
-
-            Debug.Log(tmpHitPosition);
 
             if(overCollider2d != null)
             {

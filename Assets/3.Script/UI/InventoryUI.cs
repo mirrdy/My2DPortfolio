@@ -38,6 +38,32 @@ public class InventoryUI : MonoBehaviour
             isActiveInventory = !isActiveInventory;
             inventoryPanel.SetActive(isActiveInventory);
         }
+
+        CheckInputQuickSlot();
+
+    }
+    private void CheckInputQuickSlot()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            qSlots[0].UseItemInSlot();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            qSlots[1].UseItemInSlot();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            qSlots[2].UseItemInSlot();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            qSlots[3].UseItemInSlot();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            qSlots[4].UseItemInSlot();
+        }
     }
     private void SlotChange(int value)
     {
@@ -74,8 +100,12 @@ public class InventoryUI : MonoBehaviour
         for (int i = 0; i < qSlots.Length; i++)
         {
             //qSlots[i].RemoveSlot();
-            //qSlots[i].slotNum = i;
             //qSlots[i].item = inventory.items[i];
+            qSlots[i].slotNum = i;
+            if (qSlots[i].linkedSlotIndex >= 0)
+            {
+                qSlots[i].item = slots[qSlots[i].linkedSlotIndex].item;
+            }
             qSlots[i].UpdateSlotUI();
         }
     }

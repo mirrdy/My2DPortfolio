@@ -80,6 +80,11 @@ public class ClickManager : MonoBehaviour
                             if ((Time.time - doubleClickTime) < interval)
                             {
                                 DoWhenSlotDoubleClick(selectedSlot);
+                                selectedSlot.UpdateSlotUI();
+                                if(selectedSlot as QuickSlot != null)
+                                {
+                                    slots[(selectedSlot as QuickSlot).linkedSlotIndex].UpdateSlotUI();
+                                }
                                 doubleClickTime = -1.0f;
                             }
                             else
@@ -152,11 +157,13 @@ public class ClickManager : MonoBehaviour
         {
             return;
         }
-        selectedItem = slot.item.CloneItem();
+        //selectedItem = slot.item.CloneItem();
+        selectedItem = slot.item;
         
         clickedItemIcon = Instantiate(slot.itemIcon, Input.mousePosition, Quaternion.identity);
         clickedItemIcon.gameObject.transform.SetParent(FindObjectOfType<Canvas>().transform);
 
+        // 아이콘 생성 후 기존 UI 이벤트 방해하지 않도록 레이캐스터 비활성화
         GraphicRaycaster raycaster = clickedItemIcon.GetComponent<GraphicRaycaster>();
         if (raycaster == null)
         {
@@ -174,7 +181,9 @@ public class ClickManager : MonoBehaviour
     }
     private void DoWhenSlotDoubleClick(Slot slot)
     {
-        if (slot.item == null)
+        slot.UseItemInSlot();
+
+        /*if (slot.item == null)
         {
             return;
         }
@@ -187,7 +196,7 @@ public class ClickManager : MonoBehaviour
             {
                 Inventory.instance.RemoveItem(slot.item);
             }
-        }
+        }*/
     }
 
     private void DestroySelectedIcon()

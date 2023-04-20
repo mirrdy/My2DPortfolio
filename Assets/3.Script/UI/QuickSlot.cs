@@ -6,9 +6,30 @@ using UnityEngine.UI;
 
 public class QuickSlot : Slot
 {
-    public int linkedSlotIndex = 0;
-    void Update()
+    public int linkedSlotIndex;
+
+    private void Awake()
     {
+        linkedSlotIndex = -1;
+    }
+    public new void UseItemInSlot()
+    {
+        if (item is null)
+        {
+            return;
+        }
+
+        bool isUse = item.Use();
+        if (isUse)
+        {
+            amountText.text = item.amount.ToString();
+            if (item.amount <= 0)
+            {
+                linkedSlotIndex = -1;
+                
+                Inventory.instance.RemoveItem(item);
+            }
+        }
 
     }
 

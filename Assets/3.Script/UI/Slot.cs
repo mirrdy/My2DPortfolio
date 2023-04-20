@@ -33,7 +33,7 @@ public class Slot : MonoBehaviour
         slot.item = tmpItem.CloneItem();
     }
 
-    private void UseItemInSlot()
+    public void UseItemInSlot()
     {
         if (item is null)
         {
@@ -49,6 +49,7 @@ public class Slot : MonoBehaviour
                 Inventory.instance.RemoveItem(item);
             }
         }
+
     }
     
 }
