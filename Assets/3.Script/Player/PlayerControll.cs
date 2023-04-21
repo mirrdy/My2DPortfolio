@@ -32,7 +32,7 @@ public class PlayerControll : MonoBehaviour
     public Transform[] hitPosition;
     public LayerMask hitLayer;
 
-    private Direction direction;
+    public Direction direction;
     private PlayerState state;
 
     private void Awake()

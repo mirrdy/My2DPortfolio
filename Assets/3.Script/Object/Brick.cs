@@ -10,6 +10,7 @@ public class Brick : MonoBehaviour
     private float[] brickCurrentHp;
     private List<Vector3> brickPosition;
     private int brickCount;
+    private Vector3 tmpPosition = Vector3.zero;
 
     public GameObject fieldItemPrefab; // 블럭 파괴시 드랍할 아이템
     // Start is called before the first frame update
@@ -38,6 +39,7 @@ public class Brick : MonoBehaviour
     public void TakeDamegeDot(Vector3 Pos, float damage)
     {
         Vector3Int brickPosition = tileMap.WorldToCell(Pos);
+        tmpPosition = brickPosition;
 
         int tileIndex = this.brickPosition.FindIndex(vector => vector.Equals(brickPosition));
         if(tileIndex < 0)
@@ -45,11 +47,16 @@ public class Brick : MonoBehaviour
             return;
         }
         brickCurrentHp[tileIndex] -= damage;
+
         if(brickCurrentHp[tileIndex] <= 0 && tileMap.GetTile<Tile>(brickPosition) != null)
         {
             DropBrick(brickPosition);
             tileMap.SetTile(brickPosition, null);
         }
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(tmpPosition, Vector3.zero);
     }
 
     private void DropBrick(Vector3Int brickPosition)

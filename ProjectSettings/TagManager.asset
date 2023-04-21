@@ -6,6 +6,7 @@ TagManager:
   tags:
   - FieldItem
   - Enemy
+  - Brick
   layers:
   - Default
   - TransparentFX
