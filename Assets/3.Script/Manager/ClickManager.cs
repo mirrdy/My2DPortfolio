@@ -109,11 +109,48 @@ public class ClickManager : MonoBehaviour
                                 // 일반 슬롯이면 선택했던 아이템 퀵슬롯에 등록(참조복사)
                                 else
                                 {
-                                    qSlot.item = selectedItem;
-                                    qSlot.linkedSlotIndex = selectedSlot.slotNum;
+                                    // 소비, 장비아이템만 퀵슬롯 등록 가능
+                                    if(selectedItem.itemType != ItemType.Etc)
+                                    {
+                                        qSlot.item = selectedItem;
+                                        qSlot.linkedSlotIndex = selectedSlot.slotNum;
+                                    }
                                 }
                                 qSlot.UpdateSlotUI();
                             }
+                            // 선택한 곳이 크래프트 슬롯이면
+                            CraftSlot cSlot = GetCraftSlotFromPosition(position);
+                            if(cSlot != null)
+                            {
+                                // 이전에 선택했던 슬롯이 일반슬롯일 때만 반응
+                                if(selectedSlot as QuickSlot == null && selectedSlot as CraftSlot == null)
+                                {
+                                    // 크래프팅 재료는 기타아이템으로만 구현할거임 (임시)
+                                    if(selectedItem.itemType == ItemType.Etc)
+                                    {
+
+                                        if (cSlot.item?.itemName == selectedItem.itemName)
+                                        {
+                                            if (selectedItem.MoveItem(1) == true)
+                                            {
+                                                cSlot.item.amount++;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            cSlot.item = selectedItem.CloneItem();
+                                            cSlot.item.amount = 0;
+                                            if (selectedItem.MoveItem(1) == true)
+                                            {
+                                                cSlot.item.amount++;
+                                            }
+                                        }
+                                    }
+                                }
+                                cSlot.UpdateSlotUI();
+                                selectedSlot.UpdateSlotUI();
+                            }
+
 
                             isSelecting = false;
                             DestroySelectedIcon();
@@ -148,6 +185,27 @@ public class ClickManager : MonoBehaviour
 
         return null;
     }
+    private CraftSlot GetCraftSlotFromPosition(Vector3 position)
+    {
+        CraftSlot[] cSlots = (CraftSlot[])FindObjectsOfType(typeof(CraftSlot));
+
+        foreach(CraftSlot cSlot in cSlots)
+        {
+            cSlot.TryGetComponent(out RectTransform slotRect);
+
+            Vector3[] slotCorners = new Vector3[4];
+            slotRect.GetWorldCorners(slotCorners);
+
+            if (slotCorners[0].x <= position.x && slotCorners[2].x >= position.x &&
+                slotCorners[0].y <= position.y && slotCorners[2].y >= position.y)
+            {
+                return cSlot;
+            }
+        }
+
+        return null;
+    }
+
 
     private void CreateSelectedItemIcon(Slot slot)
     {

@@ -7,6 +7,7 @@ TagManager:
   - FieldItem
   - Enemy
   - Brick
+  - WorkSpace
   layers:
   - Default
   - TransparentFX

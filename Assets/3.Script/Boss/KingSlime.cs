@@ -20,6 +20,9 @@ public class KingSlime : MonoBehaviour
     public Transform shadeTransform;
 
     private Vector3 jumpPosOffset;
+    public int damage;
+
+    
 
 
     private void Awake()
@@ -61,6 +64,7 @@ public class KingSlime : MonoBehaviour
 
         else if(aniState.IsName("PrepareJump") && aniState.normalizedTime >= 1)
         {
+            boxCollider.enabled = false;
             animator.SetTrigger("Jump");
 
             myRigid.velocity = (target.position - transform.position);
@@ -78,6 +82,7 @@ public class KingSlime : MonoBehaviour
             animator.SetTrigger("Ground");
 
             myRigid.velocity = Vector2.zero;
+            boxCollider.enabled = true;
         }
         else
         {
@@ -129,7 +134,6 @@ public class KingSlime : MonoBehaviour
                         }
                         else
                         {
-                            Debug.Log("찾았음");
                             target = cols[i].gameObject.transform;
                         }
                     }
@@ -137,7 +141,7 @@ public class KingSlime : MonoBehaviour
             }
             else
             {
-                Debug.Log("거리 안에 없음");
+                //Debug.Log("거리 안에 없음");
                 target = null;
             }
             yield return new WaitForSeconds(1);
@@ -148,7 +152,6 @@ public class KingSlime : MonoBehaviour
         while (true)
         {
             animator.SetTrigger("PrepareJump");
-            boxCollider.isTrigger = false;
 
             yield return new WaitUntil(() => 
             animator.GetCurrentAnimatorStateInfo(0).IsName("PrepareJump") &&
@@ -156,7 +159,6 @@ public class KingSlime : MonoBehaviour
             );
 
             animator.SetTrigger("Jump");
-            boxCollider.isTrigger = true;
             isJumping = true;
 
             Vector2 destJumpPos = transform.position + new Vector3(2, 2);
@@ -170,11 +172,10 @@ public class KingSlime : MonoBehaviour
             animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1) ||
             Vector3.Distance(transform.position, destJumpPos) < 0.1f 
             );
-            
+             
 
             myRigid.velocity = new Vector2(0, 0);
             animator.SetTrigger("Ground");
-            boxCollider.isTrigger = false;
             isJumping = false;
 
             yield return new WaitUntil(() => 
@@ -184,17 +185,21 @@ public class KingSlime : MonoBehaviour
         }
     }
 
-
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag("Brick"))
+        if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Jump"))
         {
-            collision.gameObject.TryGetComponent(out Brick brick);
-            brick.TakeDamegeDot(collision.transform.position, 10);
+            return;
+        }
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.gameObject.TryGetComponent(out PlayerControll player);
 
+            player.TakeDamage(damage);
         }
     }
+
+
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Brick"))
@@ -209,6 +214,10 @@ public class KingSlime : MonoBehaviour
                 brick.TakeDamegeDot(colPoints[i].point, 10);
             }
         }
-    }
 
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            //Debug.Log("플레이어와 충돌 Stay");
+        }
+    }
 }

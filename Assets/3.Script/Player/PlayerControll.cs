@@ -15,7 +15,8 @@ public class PlayerControll : MonoBehaviour
     {
         Idle,
         Move,
-        Attack
+        Attack,
+        Craft
     };
 
     private Movement2D movement2D;
@@ -25,15 +26,17 @@ public class PlayerControll : MonoBehaviour
 
     public int maxHp = 100;
     public int currentHp;
-    public int baseSpeed = 5;
+    public int baseSpeed;
     private int speed = 0;
     public float atkDamage = 1;
 
     public Transform[] hitPosition;
-    public LayerMask hitLayer;
+    public LayerMask BrickLayer;
 
     public Direction direction;
     private PlayerState state;
+
+    private WorkSpace workSpace;
 
     private void Awake()
     {
@@ -66,6 +69,15 @@ public class PlayerControll : MonoBehaviour
 
     void InputKey()
     {
+        if(state == PlayerState.Craft)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                workSpace.craftUI.CloseUI();
+                state = PlayerState.Idle;
+            }
+            return;
+        }
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
         #region 이동
@@ -136,7 +148,45 @@ public class PlayerControll : MonoBehaviour
         {
             StartCoroutine(Attack_co());
         }
+        if(Input.GetKeyDown(KeyCode.B))
+        {
+            UseCraft();
+        }
         #endregion
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHp -= damage;
+        Debug.Log($"플레이어 HP: {currentHp}/{maxHp}");
+        if(currentHp <= 0)
+        {
+            Debug.Log("플레이어 사망");
+        }
+    }
+
+    private void UseCraft()
+    {
+        Collider2D overCollider2d;
+        Vector2 tmpHitPosition;
+
+        int dir = (int)direction;
+        if(dir == 3)
+        {
+            dir = 2;
+        }
+        tmpHitPosition = hitPosition[dir].position;
+        overCollider2d = Physics2D.OverlapCircle(tmpHitPosition, 0.01f);
+
+        if(overCollider2d != null)
+        {
+            overCollider2d.TryGetComponent(out workSpace);
+            if(workSpace != null)
+            {
+                workSpace.Open();
+                state = PlayerState.Craft;
+            }
+        }
     }
     IEnumerator Attack_co()
     {
@@ -169,11 +219,11 @@ public class PlayerControll : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log($"collision Enter: {collision.collider.name}");
+        //Debug.Log($"collision Enter: {collision.collider.name}");
     }
     private void OnCollisionStay2D(Collision2D collision)
     {
-        Debug.Log($"collision Stay: {collision.collider.name}");
+        //Debug.Log($"collision Stay: {collision.collider.name}");
     }
 
 
@@ -195,13 +245,13 @@ public class PlayerControll : MonoBehaviour
             if(dir == 2)
             {
                 tmpHitPosition = hitPosition[dir].position + new Vector3(0, 0.07f * i / scaleY);
-                overCollider2d = Physics2D.OverlapCircle(tmpHitPosition, 0.01f, hitLayer);
+                overCollider2d = Physics2D.OverlapCircle(tmpHitPosition, 0.01f, BrickLayer);
             }
             // 앞뒤방향 (x축 3개)
             else
             {
                 tmpHitPosition = hitPosition[dir].position + new Vector3(0.07f * i / scaleX, 0);
-                overCollider2d = Physics2D.OverlapCircle(tmpHitPosition, 0.01f, hitLayer);
+                overCollider2d = Physics2D.OverlapCircle(tmpHitPosition, 0.01f, BrickLayer);
             }
 
             if(overCollider2d != null)

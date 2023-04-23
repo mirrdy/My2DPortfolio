@@ -12,6 +12,12 @@ public class QuickSlot : Slot
     {
         linkedSlotIndex = -1;
     }
+    public new void UpdateSlotUI()
+    {
+        itemIcon.sprite = item.itemImage;
+        amountText.text = item.amount.ToString();
+        itemIcon.gameObject.SetActive(true);
+    }
     public new void UseItemInSlot()
     {
         if (item is null)

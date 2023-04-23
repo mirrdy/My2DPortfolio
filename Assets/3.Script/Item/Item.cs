@@ -33,6 +33,17 @@ public class Item
         return tmpItem;
     }
 
+    public bool MoveItem(int amount)
+    {
+        if (this.amount < amount)
+        {
+            return false;
+        }
+
+        this.amount -= amount;
+        return true;
+    }
+
     public bool Use()
     {
         bool isUsed = false;

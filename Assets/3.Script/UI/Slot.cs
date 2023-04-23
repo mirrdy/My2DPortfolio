@@ -14,6 +14,13 @@ public class Slot : MonoBehaviour
 
     public void UpdateSlotUI()
     {
+        if(item.amount <= 0)
+        {
+            itemIcon.sprite = null;
+            itemIcon.gameObject.SetActive(false);
+            amountText.text = "0";
+            return;
+        }
         itemIcon.sprite = item.itemImage;
         amountText.text = item.amount.ToString();
         itemIcon.gameObject.SetActive(true);
