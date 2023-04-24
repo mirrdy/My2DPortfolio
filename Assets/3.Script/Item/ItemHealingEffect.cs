@@ -21,4 +21,9 @@ public class ItemHealingEffect : ItemEffect
 
         return true;
     }
+
+    public override bool ExecuteRole(int invenIndex)
+    {
+        throw new System.NotImplementedException();
+    }
 }

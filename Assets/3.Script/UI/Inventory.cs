@@ -42,7 +42,7 @@ public class Inventory : MonoBehaviour
 
     public bool AddItem(Item item)
     {
-        if (item.itemType != ItemType.Equipment)
+        if (item.itemType != ItemType.Equipable)
         {
             int itemIndex = this.items.FindIndex(findItem => findItem.itemName == item.itemName);
             if (itemIndex >= 0)

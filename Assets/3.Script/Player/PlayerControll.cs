@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerControll : MonoBehaviour
 {
@@ -21,14 +22,15 @@ public class PlayerControll : MonoBehaviour
     public enum EquipPart
     {
         Weapon,
-        Shield
+        Shield,
+        NonEquipment
     }
 
     private Movement2D movement2D;
     private Rigidbody2D myRigid;
     private Animator animator;
     private Object targetObject;
-    private Weapon weapon;
+    //private Weapon weapon;
 
     public int maxHp = 100;
     public int currentHp;
@@ -36,6 +38,7 @@ public class PlayerControll : MonoBehaviour
     private int speed = 0;
     public float atkDamage = 1;
     public int def = 0;
+    public Item[] equips = new Item[2];
 
     public Transform[] hitPosition;
     public LayerMask BrickLayer;
@@ -166,11 +169,12 @@ public class PlayerControll : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        currentHp -= damage - def;
+        currentHp -= damage - (def + sumAllEquipDef());
         Debug.Log($"플레이어 HP: {currentHp}/{maxHp}");
         if(currentHp <= 0)
         {
             Debug.Log("플레이어 사망");
+            SceneManager.LoadScene("GameOver");
         }
     }
 
@@ -239,12 +243,58 @@ public class PlayerControll : MonoBehaviour
             overCollider2d.TryGetComponent(out targetObject);
             if (targetObject != null)
             {
-                targetObject.TakeDamage((int)atkDamage);
+                targetObject.TakeDamage((int)atkDamage + sumAllEquipAtk());
             }
         }
 
 
         state = PlayerState.Idle;
+    }
+
+    public bool Equip(int invenIndex)
+    {
+        Item equipItem = Inventory.instance.items[invenIndex];
+
+        if(equipItem.equipPart == EquipPart.NonEquipment)
+        {
+            return false;
+        }
+
+        int equipPart = (int)equipItem.equipPart;
+        if(equips[equipPart].itemName != "")
+        {
+            Inventory.instance.AddItem(equips[equipPart]);
+        }
+        equips[equipPart] = equipItem;
+        Inventory.instance.RemoveItem(equipItem);
+
+        return true;
+    }
+    public int sumAllEquipAtk()
+    {
+        int sumAtk = 0;
+        foreach(Item equipment in equips)
+        {
+            if(equipment == null)
+            {
+                continue;
+            }
+            sumAtk += equipment.atk;
+        }
+        return sumAtk;
+    }
+    public int sumAllEquipDef()
+    {
+        int sumDef = 0;
+        foreach (Item equipment in equips)
+        {
+            if (equipment == null)
+            {
+                continue;
+            }
+            sumDef += equipment.def;
+        }
+        return sumDef;
     }
     
     public void DigBrick()

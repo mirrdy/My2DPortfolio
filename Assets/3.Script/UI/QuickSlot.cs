@@ -14,9 +14,18 @@ public class QuickSlot : Slot
     }
     public new void UpdateSlotUI()
     {
-        itemIcon.sprite = item.itemImage;
-        amountText.text = item.amount.ToString();
-        itemIcon.gameObject.SetActive(true);
+        if (linkedSlotIndex < 0)
+        {
+            itemIcon.sprite = null;
+            amountText.text = "0";
+            itemIcon.gameObject.SetActive(false);
+        }
+        else
+        {
+            itemIcon.sprite = item.itemImage;
+            amountText.text = item.amount.ToString();
+            itemIcon.gameObject.SetActive(true);
+        }
     }
     public new void UseItemInSlot()
     {
@@ -25,7 +34,7 @@ public class QuickSlot : Slot
             return;
         }
 
-        bool isUse = item.Use();
+        bool isUse = item.Use(Inventory.instance.items.FindIndex(item => item == this.item));
         if (isUse)
         {
             amountText.text = item.amount.ToString();

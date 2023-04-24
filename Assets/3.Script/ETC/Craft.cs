@@ -30,16 +30,25 @@ public class Craft : MonoBehaviour
             // Brick + Brick
             if (item2.itemName == "brick")
             {
-                // 2개 + 3개
-                if (item1.amount == 2 && item2.amount == 3)
+
+                // sword1
+                if (item1.amount  + item2.amount == 3)
                 {
-                    Inventory.instance.AddItem(craftItemList.Find((item) => item.itemName == "ShortSword"));
+                    
+                    Inventory.instance.AddItem(craftItemList.Find((item) => item.itemName == craftItemList[0].itemName));
                     ClearCraftSlot();
                 }
-                // 3개 + 2개
-                else if(item1.amount == 3 && item2.amount == 2)
+                // sword2
+                else if (item1.amount + item2.amount == 5)
                 {
-                    Inventory.instance.AddItem(craftItemList.Find((item) => item.itemName == "SlimeSword"));
+                    Inventory.instance.AddItem(craftItemList.Find((item) => item.itemName == craftItemList[1].itemName));
+                    ClearCraftSlot();
+                }
+                // shield1
+                else if (item1.amount + item2.amount == 4)
+                {
+
+                    Inventory.instance.AddItem(craftItemList.Find((item) => item.itemName == craftItemList[2].itemName));
                     ClearCraftSlot();
                 }
             }

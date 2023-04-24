@@ -5,14 +5,16 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "ItemEffect/Equipable")]
 public class ItemEquipEffect : ItemEffect
 {
-    PlayerControll player;
-    public PlayerControll.EquipPart equipPart;
-    public int atk;
-    public int def;
     public override bool ExecuteRole()
     {
-        GameObject.FindGameObjectWithTag("Player").TryGetComponent(out player);
-        
+        return false;
+    }
+
+    public override bool ExecuteRole(int invenIndex)
+    {
+        GameObject.FindGameObjectWithTag("Player").TryGetComponent(out PlayerControll player);
+
+        player.Equip(invenIndex);
 
         return true;
     }

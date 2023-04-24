@@ -126,7 +126,11 @@ MonoBehaviour:
     itemName: sword2
     itemImage: {fileID: 21300000, guid: df486b5ed5801454ab78ec1ed858f727, type: 3}
     amount: 1
+    atk: 3
+    def: 0
     itemType: 0
-    effects: []
+    equipPart: 0
+    effects:
+    - {fileID: 11400000, guid: 8efd95f8a42915640a146834ca1a30e5, type: 2}
   image: {fileID: 116413679763340711}
-  dropProb: 50
+  dropProb: 100

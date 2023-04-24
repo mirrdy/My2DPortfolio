@@ -97,7 +97,6 @@ GameObject:
   - component: {fileID: 3403275589232202831}
   - component: {fileID: 3403275589232202828}
   - component: {fileID: 3403275589232202829}
-  - component: {fileID: 3403275589232202826}
   m_Layer: 0
   m_Name: kingSlime
   m_TagString: Enemy
@@ -209,18 +208,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 998c6e1061bceb14cb8ec5af0a0b95a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHp: 100
+  currentHp: 0
+  dropTable:
+  - {fileID: 3980189079562601352, guid: 51b2a5fa9922f1f4f8e6b66484c7b158, type: 3}
+  - {fileID: 3980189079562601352, guid: fd1144335a959bd46a4b61287923962c, type: 3}
+  - {fileID: 3980189079562601352, guid: 9e2df98eb4959334dba0c49d92bebf36, type: 3}
   target: {fileID: 0}
   movement2D: {fileID: 0}
   boxCollider: {fileID: 0}
   myRigid: {fileID: 0}
-  thisObject: {fileID: 0}
   isJumping: 0
   isAggressive: 0
   speed: 20
   findRadius: 4
   shadeTransform: {fileID: 3403275588236659413}
-  damage: 5000
-  isDead: 0
+  damage: 50
 --- !u!95 &3403275589232202831
 Animator:
   serializedVersion: 3
@@ -275,17 +278,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   moveDirection: {x: 0, y: 0, z: 0}
---- !u!114 &3403275589232202826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3403275589232202818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe9c91bb9873d5943b89b9beb6e79ee2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHp: 0
-  dropTable: []

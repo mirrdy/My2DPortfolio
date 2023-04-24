@@ -5,5 +5,5 @@ using UnityEngine;
 public abstract class ItemEffect : ScriptableObject
 {
     public abstract bool ExecuteRole();
-
+    public abstract bool ExecuteRole(int invenIndex);
 }

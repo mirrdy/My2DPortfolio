@@ -126,8 +126,11 @@ MonoBehaviour:
     itemName: potion1
     itemImage: {fileID: 21300000, guid: 7c3e87e55ba13ee40bde87cfe0c57589, type: 3}
     amount: 1
+    atk: 0
+    def: 0
     itemType: 1
+    equipPart: 0
     effects:
     - {fileID: 11400000, guid: f537573eea30f3d43a608698dcb130fd, type: 2}
   image: {fileID: 116413679763340711}
-  dropProb: 50
+  dropProb: 100
