@@ -14,6 +14,10 @@ public class Slot : MonoBehaviour
 
     public void UpdateSlotUI()
     {
+        if(item==null)
+        {
+            return;
+        }
         if(item.amount <= 0)
         {
             itemIcon.sprite = null;

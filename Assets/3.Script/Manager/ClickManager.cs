@@ -122,13 +122,12 @@ public class ClickManager : MonoBehaviour
                             CraftSlot cSlot = GetCraftSlotFromPosition(position);
                             if(cSlot != null)
                             {
-                                // 이전에 선택했던 슬롯이 일반슬롯일 때만 반응
+                                // 이전에 선택했던 슬롯이 일반슬롯일 때
                                 if(selectedSlot as QuickSlot == null && selectedSlot as CraftSlot == null)
                                 {
                                     // 크래프팅 재료는 기타아이템으로만 구현할거임 (임시)
                                     if(selectedItem.itemType == ItemType.Etc)
                                     {
-
                                         if (cSlot.item?.itemName == selectedItem.itemName)
                                         {
                                             if (selectedItem.MoveItem(1) == true)
@@ -160,6 +159,47 @@ public class ClickManager : MonoBehaviour
                     Debug.Log($"Slot{selectedSlot.slotNum} is selected");
                     
                     break;
+                }
+            }
+        }
+        else if (Input.GetMouseButtonDown(1))
+        {
+            CraftSlot[] cSlots = (CraftSlot[])FindObjectsOfType(typeof(CraftSlot));
+            Vector3 position = Input.mousePosition;
+
+            foreach (Slot slot in cSlots)
+            {
+                if (slot.gameObject.activeSelf == false)
+                {
+                    continue;
+                }
+                else if (slot.item == null && isSelecting == false)
+                {
+                    continue;
+                }
+
+                slot.TryGetComponent(out RectTransform slotRect);
+
+                Vector3[] slotCorners = new Vector3[4];
+                slotRect.GetWorldCorners(slotCorners);
+
+                if (slotCorners[0].x <= position.x && slotCorners[2].x >= position.x &&
+                    slotCorners[0].y <= position.y && slotCorners[2].y >= position.y)
+                {
+                    if(slot.item == null)
+                    {
+                        return;
+                    }
+
+                    slot.item.amount--;
+                    Inventory.instance.AddItem(slot.item);
+
+                    if (slot.item.amount <=0)
+                    {
+                        slot.RemoveSlot();
+                        return;
+                    }
+                    slot.UpdateSlotUI();
                 }
             }
         }

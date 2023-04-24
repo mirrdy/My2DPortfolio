@@ -6,6 +6,7 @@ public class FieldItem : MonoBehaviour
 {
     public Item item;
     public SpriteRenderer image;
+    public float dropProb;
 
     public void SetItem(Item item)
     {

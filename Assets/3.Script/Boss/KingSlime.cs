@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KingSlime : MonoBehaviour
+public class KingSlime : Object
 {
     public Transform target;
     public Movement2D movement2D;
     public BoxCollider2D boxCollider;
     public Rigidbody2D myRigid;
-    IEnumerator changeCollider;
+
+    IEnumerator chaseTarget;
     IEnumerator findTarget;
     public bool isJumping = false;
     public bool isAggressive = false;
@@ -22,8 +23,6 @@ public class KingSlime : MonoBehaviour
     private Vector3 jumpPosOffset;
     public int damage;
 
-    
-
 
     private void Awake()
     {
@@ -31,12 +30,11 @@ public class KingSlime : MonoBehaviour
         TryGetComponent(out boxCollider);
         TryGetComponent(out myRigid);
         TryGetComponent(out animator);
-        changeCollider = ChangeCollider_co();
         findTarget = FindTarget_co();
-        StartCoroutine(findTarget);
+        
         jumpPosOffset = new Vector3(0, 1.75f);
-
-        //StartCoroutine(changeCollider);
+        currentHp = maxHp;
+        StartCoroutine(findTarget);
     }
     
     private void FixedUpdate()
@@ -50,7 +48,7 @@ public class KingSlime : MonoBehaviour
 
         if (target == null)
         {
-            if(aniState.IsName("Idle") == false && aniState.normalizedTime >= 1)
+            if (aniState.IsName("Idle") == false && aniState.normalizedTime >= 1)
             {
                 animator.Play("Idle");
             }
@@ -62,21 +60,18 @@ public class KingSlime : MonoBehaviour
             animator.SetTrigger("PrepareJump");
         }
 
-        else if(aniState.IsName("PrepareJump") && aniState.normalizedTime >= 1)
+        else if (aniState.IsName("PrepareJump") && aniState.normalizedTime >= 1)
         {
             boxCollider.enabled = false;
             animator.SetTrigger("Jump");
 
             myRigid.velocity = (target.position - transform.position);
 
-            target.gameObject.TryGetComponent(out PlayerControll player);
-            
-
             destJumpPos = target.position + jumpPosOffset;
             transform.position += jumpPosOffset;
         }
 
-        else if(aniState.IsName("Jump") && aniState.normalizedTime >= 1 && Vector3.Distance(transform.position, destJumpPos) < 0.1f)
+        else if (aniState.IsName("Jump") && aniState.normalizedTime >= 1 && Vector3.Distance(transform.position, destJumpPos) < 0.1f)
         {
             transform.position -= jumpPosOffset;
             animator.SetTrigger("Ground");
@@ -86,18 +81,8 @@ public class KingSlime : MonoBehaviour
         }
         else
         {
-            
+
         }
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    private void OnDrawGizmos()
-    {
-        //Gizmos.DrawSphere(transform.position, findRadius);
-        
     }
 
     private IEnumerator FindTarget_co()
@@ -141,47 +126,9 @@ public class KingSlime : MonoBehaviour
             }
             else
             {
-                //Debug.Log("거리 안에 없음");
                 target = null;
             }
             yield return new WaitForSeconds(1);
-        }
-    }
-    private IEnumerator ChangeCollider_co()
-    {
-        while (true)
-        {
-            animator.SetTrigger("PrepareJump");
-
-            yield return new WaitUntil(() => 
-            animator.GetCurrentAnimatorStateInfo(0).IsName("PrepareJump") &&
-            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1
-            );
-
-            animator.SetTrigger("Jump");
-            isJumping = true;
-
-            Vector2 destJumpPos = transform.position + new Vector3(2, 2);
-            //Vector2 dirVector = new Vector2(5, 5).normalized * speed * Time.deltaTime;
-            //movement2D.MoveTo(dirVector);
-
-            myRigid.velocity = new Vector2(1, 1);
-
-            yield return new WaitUntil(() =>
-            (animator.GetCurrentAnimatorStateInfo(0).IsName("Jump") &&
-            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1) ||
-            Vector3.Distance(transform.position, destJumpPos) < 0.1f 
-            );
-             
-
-            myRigid.velocity = new Vector2(0, 0);
-            animator.SetTrigger("Ground");
-            isJumping = false;
-
-            yield return new WaitUntil(() => 
-            animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") &&
-            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1
-            );
         }
     }
 
@@ -191,6 +138,20 @@ public class KingSlime : MonoBehaviour
         {
             return;
         }
+
+        if (collision.gameObject.CompareTag("Brick"))
+        {
+            collision.gameObject.TryGetComponent(out Brick brick);
+
+            ContactPoint2D[] colPoints = new ContactPoint2D[collision.contactCount];
+            collision.GetContacts(colPoints);
+
+            for (int i = 0; i < colPoints.Length; i++)
+            {
+                brick.TakeDamegeDot(colPoints[i].point, 10);
+            }
+        }
+
         if (collision.gameObject.CompareTag("Player"))
         {
             collision.gameObject.TryGetComponent(out PlayerControll player);
@@ -199,25 +160,10 @@ public class KingSlime : MonoBehaviour
         }
     }
 
-
-    private void OnCollisionStay2D(Collision2D collision)
+    public override void DestroyThisObject()
     {
-        if (collision.gameObject.CompareTag("Brick"))
-        {
-            collision.gameObject.TryGetComponent(out Brick brick);
+        StopCoroutine(findTarget);
 
-            ContactPoint2D[] colPoints = new ContactPoint2D[collision.contactCount];
-            collision.GetContacts(colPoints);
-
-            for(int i =0; i<colPoints.Length; i++)
-            {
-                brick.TakeDamegeDot(colPoints[i].point, 10);
-            }
-        }
-
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            //Debug.Log("플레이어와 충돌 Stay");
-        }
+        animator.SetTrigger("Die");
     }
 }

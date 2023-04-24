@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d679c09c516dc3439f0cd5daebce018, type: 3}
   m_Name: middleHpPotion
   m_EditorClassIdentifier: 
+  healingPoint: 100

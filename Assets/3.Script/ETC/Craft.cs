@@ -20,6 +20,10 @@ public class Craft : MonoBehaviour
 
     private void CheckCraftList(Item item1, Item item2)
     {
+        if(item1 == null || item2 == null)
+        {
+            return;
+        }
         // Brick 기반 조합
         if(item1.itemName == "brick")
         {
@@ -52,7 +56,6 @@ public class Craft : MonoBehaviour
         craftSlots[0].RemoveSlot();
         craftSlots[1].RemoveSlot();
 
-        craftSlots[0].item = null;
     }
     private void UpdateCraftSlot()
     {

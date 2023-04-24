@@ -18,10 +18,16 @@ public class PlayerControll : MonoBehaviour
         Attack,
         Craft
     };
+    public enum EquipPart
+    {
+        Weapon,
+        Shield
+    }
 
     private Movement2D movement2D;
     private Rigidbody2D myRigid;
     private Animator animator;
+    private Object targetObject;
     private Weapon weapon;
 
     public int maxHp = 100;
@@ -29,6 +35,7 @@ public class PlayerControll : MonoBehaviour
     public int baseSpeed;
     private int speed = 0;
     public float atkDamage = 1;
+    public int def = 0;
 
     public Transform[] hitPosition;
     public LayerMask BrickLayer;
@@ -69,15 +76,17 @@ public class PlayerControll : MonoBehaviour
 
     void InputKey()
     {
-        if(state == PlayerState.Craft)
+        #region 작업대
+        if (state == PlayerState.Craft)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) || (Input.GetKeyDown(KeyCode.B) && workSpace.craftUI.enabled == true))
             {
                 workSpace.craftUI.CloseUI();
                 state = PlayerState.Idle;
             }
             return;
         }
+        #endregion
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
         #region 이동
@@ -157,7 +166,7 @@ public class PlayerControll : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        currentHp -= damage;
+        currentHp -= damage - def;
         Debug.Log($"플레이어 HP: {currentHp}/{maxHp}");
         if(currentHp <= 0)
         {
@@ -213,20 +222,31 @@ public class PlayerControll : MonoBehaviour
                     break;
                 }
         }
+
+        Collider2D overCollider2d;
+        Vector2 tmpHitPosition;
+
+        int dir = (int)direction;
+        if (dir == 3)
+        {
+            dir = 2;
+        }
+        tmpHitPosition = hitPosition[dir].position;
+        overCollider2d = Physics2D.OverlapCircle(tmpHitPosition, 0.02f);
+
+        if (overCollider2d != null)
+        {
+            overCollider2d.TryGetComponent(out targetObject);
+            if (targetObject != null)
+            {
+                targetObject.TakeDamage((int)atkDamage);
+            }
+        }
+
+
         state = PlayerState.Idle;
-        Debug.Log("State: co finish - Idle");
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        //Debug.Log($"collision Enter: {collision.collider.name}");
-    }
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        //Debug.Log($"collision Stay: {collision.collider.name}");
-    }
-
-
+    
     public void DigBrick()
     {
         int dir = ((int)direction);
