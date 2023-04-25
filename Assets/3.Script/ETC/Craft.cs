@@ -35,21 +35,25 @@ public class Craft : MonoBehaviour
                 if (item1.amount  + item2.amount == 3)
                 {
                     
-                    Inventory.instance.AddItem(craftItemList.Find((item) => item.itemName == craftItemList[0].itemName));
-                    ClearCraftSlot();
+                    //Inventory.instance.AddItem(craftItemList.Find((item) => item.itemName == craftItemList[0].itemName));
+                    Inventory.instance.AddItem(craftItemList[0]);
                 }
                 // sword2
                 else if (item1.amount + item2.amount == 5)
                 {
-                    Inventory.instance.AddItem(craftItemList.Find((item) => item.itemName == craftItemList[1].itemName));
-                    ClearCraftSlot();
+                    //Inventory.instance.AddItem(craftItemList.Find((item) => item.itemName == craftItemList[1].itemName));
+                    Inventory.instance.AddItem(craftItemList[1]);
                 }
                 // shield1
                 else if (item1.amount + item2.amount == 4)
                 {
-
-                    Inventory.instance.AddItem(craftItemList.Find((item) => item.itemName == craftItemList[2].itemName));
-                    ClearCraftSlot();
+                    //Inventory.instance.AddItem(craftItemList.Find((item) => item.itemName == craftItemList[2].itemName));
+                    Inventory.instance.AddItem(craftItemList[2]);
+                }
+                //potion1
+                else if(item1.amount+item2.amount == 2)
+                {
+                    Inventory.instance.AddItem(craftItemList[3]);
                 }
             }
         }
@@ -58,6 +62,7 @@ public class Craft : MonoBehaviour
         {
 
         }
+        ClearCraftSlot();
         UpdateCraftSlot();
     }
     private void ClearCraftSlot()
@@ -70,5 +75,9 @@ public class Craft : MonoBehaviour
     {
         craftSlots[0].UpdateSlotUI();
         craftSlots[1].UpdateSlotUI();
+    }
+    private void UpdateInventoryUI()
+    {
+
     }
 }

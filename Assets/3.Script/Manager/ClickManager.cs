@@ -147,6 +147,10 @@ public class ClickManager : MonoBehaviour
                                     }
                                 }
                                 cSlot.UpdateSlotUI();
+                                if(selectedItem.amount <= 0)
+                                {
+                                    Inventory.instance.RemoveItem(selectedItem);
+                                }
                                 selectedSlot.UpdateSlotUI();
                             }
 

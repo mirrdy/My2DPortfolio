@@ -35,6 +35,11 @@ public class QuickSlot : Slot
         }
 
         bool isUse = item.Use(Inventory.instance.items.FindIndex(item => item == this.item));
+        if (item is null)
+        {
+            linkedSlotIndex = -1;
+            return;
+        }
         if (isUse)
         {
             amountText.text = item.amount.ToString();

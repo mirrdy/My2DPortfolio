@@ -102,9 +102,18 @@ public class InventoryUI : MonoBehaviour
             //qSlots[i].RemoveSlot();
             //qSlots[i].item = inventory.items[i];
             qSlots[i].slotNum = i;
+            
             if (qSlots[i].linkedSlotIndex >= 0)
             {
-                qSlots[i].item = slots[qSlots[i].linkedSlotIndex].item;
+                if (slots[qSlots[i].linkedSlotIndex].item == null)
+                {
+                    qSlots[i].linkedSlotIndex = -1;
+                    qSlots[i].item = null;
+                }
+                else
+                {
+                    qSlots[i].item = slots[qSlots[i].linkedSlotIndex].item;
+                }
             }
             qSlots[i].UpdateSlotUI();
         }

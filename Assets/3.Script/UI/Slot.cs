@@ -52,6 +52,10 @@ public class Slot : MonoBehaviour
         }
 
         bool isUse = item.Use(Inventory.instance.items.FindIndex(item => item == this.item));
+        if(item is null)
+        {
+            return;
+        }
         if (isUse)
         {
             amountText.text = item.amount.ToString();
