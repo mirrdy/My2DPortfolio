@@ -22,7 +22,7 @@ public class Item
 
     public Item()
     {
-
+        
     }
     public Item(string itemName, Sprite itemImage, int amount = 1, int atk = 0, int def = 0, ItemType itemType = ItemType.Etc, 
         PlayerControll.EquipPart equipPart = PlayerControll.EquipPart.NonEquipment, List<ItemEffect> effects = null)
