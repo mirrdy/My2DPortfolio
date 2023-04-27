@@ -53,7 +53,13 @@ public abstract class Object : MonoBehaviour
                 Debug.Log($"Roll:{roll}, dropProb:{fieldItem.dropProb} - ¹Ì»ý¼º");
             }
         }
-
+    }
+    private void Destroy()
+    {
         Destroy(gameObject);
+    }
+    private void ActiveOff()
+    {
+        gameObject.SetActive(false);
     }
 }

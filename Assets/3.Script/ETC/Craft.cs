@@ -15,6 +15,23 @@ public class Craft : MonoBehaviour
     }
     public void CraftItem()
     {
+        if(craftSlots[0].item != null && craftSlots[1].item != null)
+        {
+
+        }
+        else if(craftSlots[0].item != null && craftSlots[1].item == null)
+        {
+
+        }
+        else if(craftSlots[0].item == null && craftSlots[1].item != null)
+        {
+
+        }
+        else
+        {
+
+        }
+        
         CheckCraftList(craftSlots[0].item, craftSlots[1].item);
     }
 
@@ -24,6 +41,9 @@ public class Craft : MonoBehaviour
         {
             return;
         }
+
+        bool isSuccess = false;
+
         // Brick 기반 조합
         if(item1.itemName == "brick")
         {
@@ -37,23 +57,36 @@ public class Craft : MonoBehaviour
                     
                     //Inventory.instance.AddItem(craftItemList.Find((item) => item.itemName == craftItemList[0].itemName));
                     Inventory.instance.AddItem(craftItemList[0]);
-                }
-                // sword2
-                else if (item1.amount + item2.amount == 5)
-                {
-                    //Inventory.instance.AddItem(craftItemList.Find((item) => item.itemName == craftItemList[1].itemName));
-                    Inventory.instance.AddItem(craftItemList[1]);
+
+                    isSuccess = true;
                 }
                 // shield1
                 else if (item1.amount + item2.amount == 4)
                 {
                     //Inventory.instance.AddItem(craftItemList.Find((item) => item.itemName == craftItemList[2].itemName));
                     Inventory.instance.AddItem(craftItemList[2]);
+
+                    isSuccess = true;
                 }
                 //potion1
                 else if(item1.amount+item2.amount == 2)
                 {
                     Inventory.instance.AddItem(craftItemList[3]);
+
+                    isSuccess = true;
+                }
+            }
+        }
+        // 슬라임조각
+        else if(item1.itemName == "slimeSlice")
+        {
+            if(item2.itemName == "slimeSlice")
+            {
+                if(item1.amount + item2.amount == 5)
+                {
+                    Inventory.instance.AddItem(craftItemList[1]);
+
+                    isSuccess = true;
                 }
             }
         }
@@ -62,7 +95,10 @@ public class Craft : MonoBehaviour
         {
 
         }
-        ClearCraftSlot();
+        if (isSuccess)
+        {
+            ClearCraftSlot();
+        }
         UpdateCraftSlot();
     }
     private void ClearCraftSlot()
