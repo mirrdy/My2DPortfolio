@@ -17,6 +17,8 @@ public class InventoryUI : MonoBehaviour
     public QuickSlot[] qSlots;
     public Transform qSlotHolder;
 
+    public PlayerControll player;
+
     private void Start()
     {
         inventory = Inventory.instance;
@@ -27,6 +29,7 @@ public class InventoryUI : MonoBehaviour
 
         inventory.onSlotCountChange += SlotChange;
         inventory.onChangeItem += RedrawSlotUI;
+
         inventoryPanel.SetActive(isActiveInventory);
 
         clickManager.onChangeItem += RedrawSlotUI;

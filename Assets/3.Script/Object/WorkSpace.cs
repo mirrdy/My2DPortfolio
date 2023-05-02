@@ -18,4 +18,9 @@ public class WorkSpace : MonoBehaviour
 
         Debug.Log("WorkSpace Open");
     }
+    public void tmpFunc()
+    {
+        //inventory.AddItem
+        
+    }
 }

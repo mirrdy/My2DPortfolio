@@ -48,6 +48,9 @@ public class PlayerControll : MonoBehaviour
 
     private WorkSpace workSpace;
 
+    public delegate void WhenTakeDamage();
+    public WhenTakeDamage whenTakeDamage;
+
     private void Awake()
     {
         TryGetComponent(out movement2D);
@@ -176,6 +179,7 @@ public class PlayerControll : MonoBehaviour
             Debug.Log("플레이어 사망");
             SceneManager.LoadScene("GameOver");
         }
+        whenTakeDamage.Invoke();
     }
 
     private void UseCraft()

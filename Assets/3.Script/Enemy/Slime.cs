@@ -8,6 +8,8 @@ public class Slime : Object
     public Movement2D movement2D;
     public BoxCollider2D boxCollider;
     public Rigidbody2D myRigid;
+    public PlayerControll player;
+
 
     IEnumerator findTarget;
 
@@ -18,6 +20,8 @@ public class Slime : Object
 
     private void OnEnable()
     {
+        GameObject.FindGameObjectWithTag("Player").TryGetComponent(out player);
+        player.whenTakeDamage += displayWhenPlayerDamaged;
         TryGetComponent(out movement2D);
         TryGetComponent(out boxCollider);
         TryGetComponent(out myRigid);
@@ -122,5 +126,10 @@ public class Slime : Object
         target = null;
 
         animator.SetTrigger("Die");
+    }
+    private void displayWhenPlayerDamaged()
+    {
+        Debug.Log("피냄새를 맡고 슬라임이 더 빨라집니다.");
+        speed++;
     }
 }

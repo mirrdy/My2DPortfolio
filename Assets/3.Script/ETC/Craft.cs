@@ -114,6 +114,6 @@ public class Craft : MonoBehaviour
     }
     private void UpdateInventoryUI()
     {
-
+        
     }
 }
