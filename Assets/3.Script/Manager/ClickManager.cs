@@ -255,7 +255,7 @@ public class ClickManager : MonoBehaviour
     {
         DestroySelectedIcon();
 
-        if (slot.item == null)
+        if (slot.item.itemName.Equals(string.Empty))
         {
             return;
         }
@@ -280,6 +280,7 @@ public class ClickManager : MonoBehaviour
 
         // 이미지의 컬러의 a값을 직접 바꿀 수가 없어서 임시로 담은 컬러를 변경 후 덮어씀
         clickedItemIcon.color = tmpColor;
+        clickedItemIcon.transform.localScale = new Vector2(1f, 1f);
     }
     private void DoWhenSlotDoubleClick(Slot slot)
     {
